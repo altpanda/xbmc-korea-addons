@@ -8,6 +8,8 @@
 import urllib, urllib2
 import re
 import json
+import time
+import StringIO, gzip
 from bs4 import BeautifulSoup
 from xbmcswift2 import Plugin
 import xml.etree.ElementTree as etree
@@ -62,17 +64,25 @@ def parseGenrePage(page_url, koPage=True):
     return items
 
 def parseGenrePage2(page_url, koPage=True):
-    req  = urllib2.Request(page_url)
+    match = re.compile(root_url+'/(\w+)', re.S).search(page_url)
+    ms = int(round(time.time())) / 60 / 5
+    json_url = root_url+'/includes/categories/'+match.group(1)+'_kr.json?cb='+str(ms)
+    req  = urllib2.Request(json_url)
     req.add_header('User-Agent', default_UA)
+    req.add_header('Accept-encoding', 'gzip')
+    req.add_header('Accept', 'application/json')
     if koPage:
         req.add_header('Accept-Langauge', 'ko')
         req.add_header('Cookie', 'language=kr')
-    html = urllib2.urlopen(req).read().decode("utf-8")
+    jsondata = urllib2.urlopen(req).read()
+    buf = StringIO.StringIO(jsondata)
+    f = gzip.GzipFile(fileobj=buf)
+    data = f.read()
+    
     items = []
-    for part in html.split('<div class="ep_box"')[1:]:
-        match = re.compile('<a href="([^"]*)" title="([^"]*)" class="poster_img_a">.*<img src="([^"]*timthumb[^"]*)"', re.S).search(part)
-        if match:
-            items.append({'title':match.group(2), 'url':root_url+"/"+match.group(1), 'thumbnail':match.group(3)})
+    episodes = json.loads(data)
+    for ep in episodes:
+        items.append({'title':ep['title'], 'url':ep['post_name'], 'thumbnail':ep['img']})
     return items
 
 def parseEpisodePage(page_url, koPage=True):
