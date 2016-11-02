@@ -69,18 +69,19 @@ def parseGenrePage2(page_url, koPage=True):
     json_url = root_url+'/includes/categories/'+match.group(1)+'_kr.json?cb='+str(ms)
     req  = urllib2.Request(json_url)
     req.add_header('User-Agent', default_UA)
-    req.add_header('Accept-encoding', 'gzip')
+#    req.add_header('Accept-encoding', 'gzip')
     req.add_header('Accept', 'application/json')
     if koPage:
         req.add_header('Accept-Langauge', 'ko')
         req.add_header('Cookie', 'language=kr')
     jsondata = urllib2.urlopen(req).read()
-    buf = StringIO.StringIO(jsondata)
-    f = gzip.GzipFile(fileobj=buf)
-    data = f.read()
+#    buf = StringIO.StringIO(jsondata)
+#    f = gzip.GzipFile(fileobj=buf)
+#    data = f.read()
     
     items = []
-    episodes = json.loads(data)
+#    episodes = json.loads(data)
+    episodes = json.loads(jsondata)
     for ep in episodes:
         items.append({'title':ep['title'], 'url':ep['post_name'], 'thumbnail':ep['img']})
     return items
