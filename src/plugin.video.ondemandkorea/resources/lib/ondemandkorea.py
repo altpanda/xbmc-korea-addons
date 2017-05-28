@@ -163,7 +163,7 @@ def extractVideoUrl(page_url, koPage=True):
         req.add_header('Accept-Langauge', 'ko')
         req.add_header('Cookie', 'language=kr')
     html = urllib2.urlopen(req).read().decode('utf-8')
-    vid_title = re.compile('<div id="title">(.*?)</div>', re.S).search(html).group(1).strip()
+    vid_title = re.compile('<div id="title"[^>]*>(.*?)</div>', re.S).search(html).group(1).strip()
     #vid_url = re.compile('<video[^>]*src="([^"]*)"').search(html).group(1)
     vid_url = re.compile("""(http[^'"]*m3u8)""").search(html, re.I | re.U).group(1)
     videos = dict()
