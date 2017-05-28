@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ondemandkorea"
-       name="Ondemand Korea"
-       version="0.5.0"
-       provider-name="XBMC-Korea">
+<addon id="plugin.video.tvbayo"
+       name="TVBayo"
+       version="1.0"
+       provider-name="edge">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -13,10 +13,10 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">OndemandKorea</summary>
-    <summary lang="ko">온디맨드 코리아</summary>
-    <description lang="en">Watch drama provided by ondemandkorea.com</description>
-    <description lang="ko">ondemandkorea.com에서 제공하는 드라마 시청</description>
+    <summary lang="en">TVBayo Streaming Service</summary>
+    <summary lang="ko">TVBayo 비디오 스트리밍 서비스</summary>
+    <description lang="en">Watch Korean TV shows in tvbayo.com</description>
+    <description lang="ko">TVBayo에서 제공하는 한국 TV프로를 볼 수 있습니다</description>
     <platform>all</platform>
   </extension>
 </addon>
