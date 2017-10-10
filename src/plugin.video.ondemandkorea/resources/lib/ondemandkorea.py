@@ -112,8 +112,8 @@ def parseEpisodePage2(page_url, page=1, koPage=True):
         req.add_header('Accept-Langauge', 'ko')
         req.add_header('Cookie', 'language=kr')
     html = urllib2.urlopen(req).read().decode('utf-8')
-    program = re.compile('"program" *: *"(.*?)"').search(html).group(1)
-    videoid = re.compile('"videoid" *: *(\d+)').search(html).group(1)
+    program = re.compile("video\.program = '(.*?)'").search(html).group(1)
+    videoid = re.compile("video\.video_id = (\d+)").search(html).group(1)
     list_url = root_url+eplist_url.format(program=program, videoid=videoid, page=page)
     req = urllib2.Request(list_url, headers=global_hdr)
     if koPage:
@@ -163,7 +163,10 @@ def extractVideoUrl(page_url, koPage=True):
         req.add_header('Accept-Langauge', 'ko')
         req.add_header('Cookie', 'language=kr')
     html = urllib2.urlopen(req).read().decode('utf-8')
-    vid_title = re.compile('<div id="title"[^>]*>(.*?)</div>', re.S).search(html).group(1).strip()
+    if koPage:
+        vid_title = re.compile('"title_kr": "(.*?)"', re.S).search(html).group(1).strip()
+    else:
+        vid_title = re.compile('"title": "(.*?)"', re.S).search(html).group(1).strip()
     #vid_url = re.compile('<video[^>]*src="([^"]*)"').search(html).group(1)
     vid_url = re.compile("""(http[^'"]*m3u8)""").search(html, re.I | re.U).group(1)
     videos = dict()
